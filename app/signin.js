@@ -9,9 +9,11 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import { useState } from "react";
+import { Link } from "expo-router";
 
 export default function signin() {
   const google_logo = require("../assets/icons/google.png");
+  const apple_logo = require("../assets/icons/apple.png");
   const [fontsLoaded, fontError] = useFonts({
     "Inter-SemiBold": require("../assets/fonts/Inter-SemiBold.ttf"),
     "Inter-Regular": require("../assets/fonts/Inter-Regular.ttf"),
@@ -60,13 +62,28 @@ export default function signin() {
             </Text>
           </View>
         </Pressable>
+        <Pressable style={{ ...styles.button, backgroundColor: "#000000" }}>
+          <View style={styles.appleButton}>
+            <Image source={apple_logo} style={{ width: 18, height: 18 }} />
+            <Text
+              style={{
+                ...styles.buttonText,
+                color: "white",
+              }}>
+              Apple
+            </Text>
+          </View>
+        </Pressable>
         <View style={{ flexDirection: "row" }}>
           <Text style={styles.agreement}>
             By clicking continue, you agree to our{" "}
-            <Text style={{ fontFamily: "Inter-Bold" }}>
-              Terms and Conditions
-            </Text>{" "}
-            and <Text style={{ fontFamily: "Inter-Bold" }}>Privacy Policy</Text>
+            <Link href='./terms'>
+              <Text style={{ fontFamily: "Inter-Bold" }}>
+                Terms and Conditions
+              </Text>{" "}
+              and{" "}
+              <Text style={{ fontFamily: "Inter-Bold" }}>Privacy Policy</Text>
+            </Link>
           </Text>
         </View>
       </View>
@@ -158,6 +175,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 5,
+    alignItems: "center",
+  },
+  appleButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
     alignItems: "center",
   },
   agreement: {

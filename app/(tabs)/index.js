@@ -7,14 +7,10 @@ import {
   SafeAreaView,
   Pressable,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useFonts } from "expo-font";
-import {
-  Feather,
-  Octicons,
-  FontAwesome6,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Feather, Octicons, FontAwesome6 } from "@expo/vector-icons";
 
 export default function home() {
   const [fontsLoaded, fontError] = useFonts({
@@ -60,6 +56,7 @@ export default function home() {
   };
   return fontsLoaded ? (
     <View style={header.container}>
+      <StatusBar barStyle='light-content' animated={false} />
       <SafeAreaView style={header.header}>
         <View style={header.vertical}>
           <View>
@@ -79,42 +76,38 @@ export default function home() {
           </View>
         </View>
         <View style={header.buttons}>
-          <Pressable>
+          <Link href='/send'>
             <View>
               <View style={header.button}>
                 <Feather name='arrow-up-right' size={24} color='white' />
               </View>
               <Text style={header.buttonText}>Send</Text>
             </View>
-          </Pressable>
-          <Pressable>
+          </Link>
+          <Link href='/receive'>
             <View>
               <View style={header.button}>
                 <Feather name='arrow-down-left' size={24} color='white' />
               </View>
               <Text style={header.buttonText}>Receive</Text>
             </View>
-          </Pressable>
-          <Pressable>
+          </Link>
+          <Link href='/calc'>
             <View>
               <View style={header.button}>
                 <FontAwesome6 name='calculator' size={24} color='white' />
               </View>
               <Text style={header.buttonText}>Calculator</Text>
             </View>
-          </Pressable>
-          <Pressable>
+          </Link>
+          <Link href='/account'>
             <View>
               <View style={header.button}>
-                <MaterialCommunityIcons
-                  name='account'
-                  size={24}
-                  color='white'
-                />
+                <Octicons name='person' size={24} color='white' />
               </View>
               <Text style={header.buttonText}>Account</Text>
             </View>
-          </Pressable>
+          </Link>
         </View>
       </SafeAreaView>
       <ScrollView style={body.main}>
@@ -123,10 +116,13 @@ export default function home() {
           <Pressable>
             <View style={body.newEvent}>
               <Text style={body.newEventText}>
-                <Text style={{ fontSize: 12, fontWeight: "bold" }}>&#43;</Text>{" "}
-                New Event
+                <Link href='/signin'>
+                  <Text style={{ fontSize: 12, fontWeight: "bold" }}>
+                    &#43;
+                  </Text>{" "}
+                  New Event
+                </Link>
               </Text>
-              <Link href='/signin'>Hi</Link>
             </View>
           </Pressable>
         </View>
@@ -230,11 +226,10 @@ const body = StyleSheet.create({
     flex: 1,
     maxWidth: 960,
     minWidth: 420,
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     fontFamily: "NotoSans-SemiBold",
     gap: 25,
     marginVertical: 30,
-    paddingHorizontal: 15,
   },
   info: {
     flexDirection: "row",
