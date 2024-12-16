@@ -1,0 +1,1 @@
+export const overrideColorScheme = () => "light";
