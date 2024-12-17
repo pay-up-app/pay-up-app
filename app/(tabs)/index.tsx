@@ -1,4 +1,10 @@
-import { StyleSheet, TextInput, Pressable } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  Pressable,
+  Animated,
+  Easing,
+} from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import {
@@ -8,8 +14,9 @@ import {
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "@/components/SearchBar";
+import OwingToggle from "@/components/OwingToggle";
 
-import React from "react";
+import React, { useState, useRef } from "react";
 import Colors from "@/constants/Colors";
 import { useColorScheme as _useColorScheme } from "@/components/useColorScheme";
 import { overrideColorScheme as useColorScheme } from "@/components/overrideColorScheme";
@@ -17,18 +24,27 @@ import { overrideColorScheme as useColorScheme } from "@/components/overrideColo
 const colorScheme = useColorScheme() as "light" | "dark";
 
 export default function indexScreen() {
-  const [text, onChangeText] = React.useState("");
-  const onPressFunction = () => {
-    onChangeText("");
-  };
+  const translateX = useRef(new Animated.Value(0)).current;
+  console.log(colorScheme);
   const alert = false;
+  const [toggle, setToggle] = useState(true);
+  const togglePress = () => {
+    const newState = !toggle;
+    Animated.timing(translateX, {
+      toValue: 200,
+      duration: 500,
+      useNativeDriver: true,
+      easing: Easing.sin,
+    }).start();
+    setToggle(newState);
+  };
   return (
     <>
       <SafeAreaView
         edges={["top"]}
         style={{ flex: 0, backgroundColor: "#0b38c7" }}
       />
-      <View style={styles.main}>
+      <View>
         <View style={styles.container}>
           <View style={styles.header_icons}>
             <MaterialCommunityIcons
@@ -36,41 +52,104 @@ export default function indexScreen() {
               size={28}
               color='white'
             />
+            <View style={styles.header_text_view}>
+              <Text style={styles.header_text_title}>Hi Bryan,</Text>
+              <Text style={styles.header_text_subtitle}>Welcome back!</Text>
+            </View>
             <MaterialCommunityIcons
               size={28}
               name={alert ? "bell-badge-outline" : "bell-outline"}
               color='white'
             />
           </View>
-          <View style={{ ...styles.header_search_container, borderRadius: 50 }}>
-            <FontAwesome name='search' size={18} color='#2e2f5f' />
-            <View style={styles.search_field}>
-              <TextInput
-                onChangeText={onChangeText}
-                placeholder='Search'
-                value={text}
-                placeholderTextColor='#6d6d8f'
-                style={{ outline: "none" }}
-              />
-            </View>
-            <Pressable onPress={onPressFunction}>
-              <FontAwesome6 name='xmark-circle' size={18} color='#7b7c9a' />
-            </Pressable>
-          </View>
+          <SearchBar />
         </View>
       </View>
       <View style={styles.body}>
-        <EditScreenInfo path='app/(tabs)/index.tsx' />
+        <Pressable onPress={togglePress}>
+          <View style={styles.toggle}>
+            <Animated.View
+              style={[
+                styles.toggle_inner,
+                {
+                  transform: [{ translateX }],
+                },
+              ]}>
+              <Text
+                style={toggle ? styles.toggle_text_on : styles.toggle_text_off}>
+                Indebted
+              </Text>
+            </Animated.View>
+            <View style={styles.toggle_right}>
+              <Text
+                style={toggle ? styles.toggle_text_off : styles.toggle_text_on}>
+                Owe
+              </Text>
+            </View>
+          </View>
+        </Pressable>
+        <View style={styles.feed}>
+          <Text>Feed</Text>
+        </View>
       </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  main: {},
   body: {
     flex: 1,
+    flexDirection: "column",
+    gap: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+  },
+  toggle_container: {
+    width: "100%",
     justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
+  },
+  toggle: {
+    flexDirection: "row",
+    backgroundColor: "#e5e5ef",
+    height: 30,
+    borderRadius: 15,
+    alignContent: "center",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingLeft: 5,
+  },
+  toggle_inner: {
+    backgroundColor: "#fff",
+    height: 20,
+    borderRadius: 15,
+    width: "50%",
+    verticalAlign: "middle",
+  },
+  toggle_right: { height: 20, width: "50%", backgroundColor: "transparent" },
+  toggle_text_on: {
+    fontFamily: "Inter_md",
+    textAlign: "center",
+    verticalAlign: "middle",
+    fontSize: 12,
+    marginVertical: "auto",
+    color: "#2E2E5F",
+  },
+  toggle_text_off: {
+    fontFamily: "Inter",
+    textAlign: "center",
+    verticalAlign: "middle",
+    fontSize: 12,
+    marginVertical: "auto",
+    color: "#757695",
+  },
+  feed: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "green",
   },
   container: {
     flexDirection: "column",
@@ -84,22 +163,21 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  header_search_container: {
-    backgroundColor: "#efeff7",
-    display: "flex",
-    flexDirection: "row",
-    gap: 10,
-    borderRadius: "20px",
-    height: 30,
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
   },
-  search_field: {
+  header_text_view: {
     flex: 1,
-    outline: "none",
-    backgroundColor: "#efeff7",
-    borderWidth: 0,
+    marginLeft: 30,
+    backgroundColor: "transparent",
+  },
+  header_text_title: {
+    color: Colors[colorScheme ?? "light"].bannerText,
+    fontSize: 14,
+    fontFamily: "Poppins_sb",
+  },
+  header_text_subtitle: {
+    color: Colors[colorScheme ?? "light"].bannerText,
+    fontSize: 12,
+    fontFamily: "Poppins",
   },
 });
