@@ -4,6 +4,7 @@ import {
   Pressable,
   Animated,
   Easing,
+  Image,
 } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
@@ -20,6 +21,7 @@ import React, { useState, useRef } from "react";
 import Colors from "@/constants/Colors";
 import { useColorScheme as _useColorScheme } from "@/components/useColorScheme";
 import { overrideColorScheme as useColorScheme } from "@/components/overrideColorScheme";
+import { UserCard } from "@/components/UserCard";
 
 const colorScheme = useColorScheme() as "light" | "dark";
 
@@ -29,13 +31,22 @@ export default function indexScreen() {
   const alert = false;
   const [toggle, setToggle] = useState(true);
   const togglePress = () => {
+    if (toggle) {
+      Animated.timing(translateX, {
+        toValue: 180,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start();
+    } else {
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+        easing: Easing.sin,
+      }).start();
+    }
     const newState = !toggle;
-    Animated.timing(translateX, {
-      toValue: 200,
-      duration: 500,
-      useNativeDriver: true,
-      easing: Easing.sin,
-    }).start();
     setToggle(newState);
   };
   return (
@@ -74,13 +85,13 @@ export default function indexScreen() {
                 {
                   transform: [{ translateX }],
                 },
-              ]}>
+              ]}></Animated.View>
+
+            <View style={styles.toggle_text}>
               <Text
                 style={toggle ? styles.toggle_text_on : styles.toggle_text_off}>
                 Indebted
               </Text>
-            </Animated.View>
-            <View style={styles.toggle_right}>
               <Text
                 style={toggle ? styles.toggle_text_off : styles.toggle_text_on}>
                 Owe
@@ -89,7 +100,12 @@ export default function indexScreen() {
           </View>
         </Pressable>
         <View style={styles.feed}>
-          <Text>Feed</Text>
+          <UserCard name='Grayson Sterling' />
+          <UserCard name='Nick Voltis' />
+          <UserCard name='Jeffery Hinds' />
+          <UserCard name='Alex Evans' />
+          <UserCard name='Gabriella Demmings' />
+          <UserCard name='Jacob Elordi' />
         </View>
       </View>
     </>
@@ -119,6 +135,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     paddingLeft: 5,
+    paddingHorizontal: 5,
+    position: "relative",
   },
   toggle_inner: {
     backgroundColor: "#fff",
@@ -126,8 +144,18 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: "50%",
     verticalAlign: "middle",
+    zIndex: 1,
   },
   toggle_right: { height: 20, width: "50%", backgroundColor: "transparent" },
+  toggle_text: {
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    width: "100%",
+    justifyContent: "space-around",
+    zIndex: 2,
+    left: "-50%",
+    paddingRight: 5,
+  },
   toggle_text_on: {
     fontFamily: "Inter_md",
     textAlign: "center",
@@ -143,13 +171,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginVertical: "auto",
     color: "#757695",
-  },
-  feed: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "green",
   },
   container: {
     flexDirection: "column",
@@ -179,5 +200,37 @@ const styles = StyleSheet.create({
     color: Colors[colorScheme ?? "light"].bannerText,
     fontSize: 12,
     fontFamily: "Poppins",
+  },
+  feed: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 22,
+    width: "100%",
+    justifyContent: "flex-start",
+    backgroundColor: "green",
+  },
+  item: {
+    alignSelf: "stretch",
+    height: 65,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  pressable_1: {
+    flex: 4,
+    flexDirection: "row",
+    gap: 12,
+  },
+  pressable_2: {
+    flex: 1,
+  },
+  icon: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+  },
+  name: {
+    fontFamily: "NS_md",
+    fontSize: 12,
   },
 });
