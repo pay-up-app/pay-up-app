@@ -4,15 +4,11 @@ import {
   Pressable,
   Animated,
   Easing,
-  Image,
+  ScrollView,
 } from "react-native";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import {
-  MaterialCommunityIcons,
-  FontAwesome,
-  FontAwesome6,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchBar from "@/components/SearchBar";
 import OwingToggle from "@/components/OwingToggle";
@@ -26,6 +22,58 @@ import { UserCard } from "@/components/UserCard";
 const colorScheme = useColorScheme() as "light" | "dark";
 
 export default function indexScreen() {
+  const users = [
+    {
+      name: "Grayson Sterling",
+      indebted: true,
+      value: 152.34,
+    },
+    {
+      name: "Nick Voltis",
+      indebted: true,
+      value: 100.0,
+    },
+    {
+      name: "Jeffery Hinds",
+      indebted: false,
+      value: 420.2,
+    },
+    {
+      name: "Alex Davies",
+      indebted: false,
+      value: 300.0,
+    },
+    {
+      name: "Mitchel Spencer",
+      indebted: true,
+      value: 25.0,
+    },
+    {
+      name: "Gordon Bennett",
+      indebted: true,
+      value: 25.0,
+    },
+    {
+      name: "Jesse Vlad",
+      indebted: true,
+      value: 25.0,
+    },
+    {
+      name: "Craig Morishita",
+      indebted: true,
+      value: 25.0,
+    },
+    {
+      name: "Jacob Elordi",
+      indebted: false,
+      value: 152.34,
+    },
+    {
+      name: "Jenna Ortega",
+      indebted: true,
+      value: 1000.0,
+    },
+  ];
   const translateX = useRef(new Animated.Value(0)).current;
   console.log(colorScheme);
   const alert = false;
@@ -99,14 +147,19 @@ export default function indexScreen() {
             </View>
           </View>
         </Pressable>
-        <View style={styles.feed}>
-          <UserCard name='Grayson Sterling' />
-          <UserCard name='Nick Voltis' />
-          <UserCard name='Jeffery Hinds' />
-          <UserCard name='Alex Evans' />
-          <UserCard name='Gabriella Demmings' />
-          <UserCard name='Jacob Elordi' />
-        </View>
+        <ScrollView contentContainerStyle={styles.feed}>
+          {users.map((user, index) => {
+            if (toggle == user.indebted)
+              return (
+                <UserCard
+                  key={index}
+                  name={user.name}
+                  indebted={user.indebted}
+                  value={user.value}
+                />
+              );
+          })}
+        </ScrollView>
       </View>
     </>
   );
@@ -118,7 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 30,
     paddingHorizontal: 30,
-    paddingVertical: 20,
+    paddingTop: 20,
   },
   toggle_container: {
     width: "100%",
@@ -207,7 +260,6 @@ const styles = StyleSheet.create({
     gap: 22,
     width: "100%",
     justifyContent: "flex-start",
-    backgroundColor: "green",
   },
   item: {
     alignSelf: "stretch",
@@ -228,9 +280,5 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
-  },
-  name: {
-    fontFamily: "NS_md",
-    fontSize: 12,
   },
 });

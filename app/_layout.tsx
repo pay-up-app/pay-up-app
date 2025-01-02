@@ -33,7 +33,9 @@ export default function RootLayout() {
     Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
     Inter: require("../assets/fonts/Inter-Regular.ttf"),
     Inter_md: require("../assets/fonts/Inter-medium.ttf"),
+    NS_rg: require("../assets/fonts/NotoSans-Regular.ttf"),
     NS_md: require("../assets/fonts/NotoSans-Medium.ttf"),
+    NS_sb: require("../assets/fonts/NotoSans-SemiBold.ttf"),
     ...FontAwesome.font,
   });
 

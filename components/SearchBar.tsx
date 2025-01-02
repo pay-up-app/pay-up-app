@@ -22,7 +22,11 @@ export default function SearchBar() {
           />
         </View>
         <Pressable onPress={onPressFunction}>
-          <FontAwesome6 name='xmark-circle' size={18} color='#7b7c9a' />
+          {text ? (
+            <FontAwesome6 name='xmark-circle' size={18} color='#7b7c9a' />
+          ) : (
+            <></>
+          )}
         </Pressable>
       </View>
     </>
